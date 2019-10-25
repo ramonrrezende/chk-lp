@@ -17,10 +17,10 @@
 
 
 ;Cria um grafo a partir de uma hash table vazia e uma lista de nós
-(define (create_graph g nodes)
+(define (create-graph g nodes)
     (hash-set! g (node-id (first nodes)) (first nodes) );associa o nó a uma chave da hash table(a chave é o id do nó)
-    (if (> (length (rest nodes)) 0) (create_graph g (rest nodes)) (display "Done!\n"));chama a função recursivamente para adicionar todos os nós da lista
-)  
+    (if (> (length (rest nodes)) 0) (create-graph g (rest nodes)) (display "Done!\n"));chama a função recursivamente para adicionar todos os nós da lista
+)
 
 (define (explore graph ch)
    (when (not (node-marked (hash-ref graph (first ch))))
@@ -42,7 +42,7 @@
     )
 )
 
-(create_graph g nodes)
+(create-graph g nodes)
 
 (newline)
 (run g 1)
