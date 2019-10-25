@@ -13,7 +13,12 @@
 
 (define nodes (list n1 n2 n3 n4))
 
+(define formula "a ; b ; ( a U b)")
+
 (create-graph g nodes)
 
 (newline)
 (run g 1)
+
+(display formula)
+(newline)
