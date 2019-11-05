@@ -19,10 +19,13 @@
                 (substring program (+ (next program (+ cursor 1) 1) 1) (string-length program))
                 (append 
                     tree
-                    (list 
-                        (string-split (substring program 0 cursor) ";")
-                        ;(substring program (+ cursor 1) (next program (+ cursor 1) 1))
-                        (build-tree (substring program (+ cursor 1) (next program (+ cursor 1) 1)) null 0)
+                    (if (equal? null (string-split (substring program 0 cursor) ";"))
+                        (append tree)
+                        (list 
+                            (string-split (substring program 0 cursor) ";")
+                            ;(substring program (+ cursor 1) (next program (+ cursor 1) 1))
+                            (build-tree (substring program (+ cursor 1) (next program (+ cursor 1) 1)) null 0)
+                        )
                     )
                 )
                 0
