@@ -20,7 +20,7 @@
                 (append 
                     tree
                     (if (equal? null (string-split (substring program 0 cursor) ";"))
-                        (append tree)
+                        (list (build-tree (substring program (+ cursor 1) (next program (+ cursor 1) 1)) null 0))
                         (list 
                             (string-split (substring program 0 cursor) ";")
                             ;(substring program (+ cursor 1) (next program (+ cursor 1) 1))
