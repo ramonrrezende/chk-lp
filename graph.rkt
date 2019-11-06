@@ -12,11 +12,12 @@
 
 (define (explore graph ch)
    (when (not (node-marked (hash-ref graph (edge-dst (first ch)))))
-        (hash-set! graph (first ch) (struct-copy node (hash-ref graph (edge-dst (first ch))) [marked #t]));marca o nó como visitado e atualiza a hash table
+        (hash-set! graph (edge-dst (first ch)) (struct-copy node (hash-ref graph (edge-dst (first ch))) [marked #t]));marca o nó como visitado e atualiza a hash table
         (display (edge-dst (first ch)));adicionar operação relevante aqui
         (display " ")
         (display (edge-program (first ch)))
         (newline)
+        (when (> (length (node-childrens (hash-ref graph (edge-dst (first ch))))) 0) (explore graph (node-childrens (hash-ref graph (edge-dst (first ch))))))
         (when (> (length (rest ch)) 0) (explore graph (rest ch)))
     )
 )

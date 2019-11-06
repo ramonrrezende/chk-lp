@@ -30,7 +30,7 @@
 (create-graph g nodes)
 
 (newline)
-(run g 1)
+(run g 2)
 
 (display formula)
 (newline)
