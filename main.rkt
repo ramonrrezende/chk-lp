@@ -1,13 +1,25 @@
 #lang racket
-(require "node.rkt" "graph.rkt")
+(require "node.rkt" "graph.rkt" "node.rkt" )
 
-(define n1 (node 1 #f (list 4 2 3)))
+(define e11 (edge 4 "a"))
 
-(define n2 (node 2 #f (list 3)))
+(define e12 (edge 2 "a"))
 
-(define n3 (node 3 #f (list 1)))
+(define e13 (edge 3 "b"))
 
-(define n4 (node 4 #f (list 4)))
+(define e21 (edge 3 "c"))
+
+(define e31 (edge 1 "b"))
+
+(define e41 (edge 4 "d"))
+
+(define n1 (node 1 #f (list e11 e12 e13)))
+
+(define n2 (node 2 #f (list e21)))
+
+(define n3 (node 3 #f (list e31)))
+
+(define n4 (node 4 #f (list e41)))
 
 (define g (make-hash))
 

@@ -11,9 +11,11 @@
 )
 
 (define (explore graph ch)
-   (when (not (node-marked (hash-ref graph (first ch))))
-        (hash-set! graph (first ch) (struct-copy node (hash-ref graph (first ch)) [marked #t]));marca o nó como visitado e atualiza a hash table
-        (display (first ch));adicionar operação relevante aqui
+   (when (not (node-marked (hash-ref graph (edge-dst (first ch)))))
+        (hash-set! graph (first ch) (struct-copy node (hash-ref graph (edge-dst (first ch))) [marked #t]));marca o nó como visitado e atualiza a hash table
+        (display (node-id (first ch)));adicionar operação relevante aqui
+        (display " ")
+        (display (edge-program (first ch)))
         (newline)
         (when (> (length (rest ch)) 0) (explore graph (rest ch)))
     )
@@ -23,6 +25,7 @@
 (define (run graph bgn)
     (hash-set! graph bgn (struct-copy node (hash-ref graph bgn) [marked #t]));cria uma cópia da estrutura com o atributo "marcado" como verdade e associa à chave da hash table
     (display  bgn);Mostra o id do nó visitado(substituir por operação relevante posteriormente)
+    (display " ")
     (newline)
     (if (> (length (node-childrens (hash-ref graph bgn))) 0)
         (explore graph (node-childrens (hash-ref graph bgn)))
