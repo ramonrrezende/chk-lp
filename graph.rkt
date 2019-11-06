@@ -13,7 +13,7 @@
 (define (explore graph ch)
    (when (not (node-marked (hash-ref graph (edge-dst (first ch)))))
         (hash-set! graph (first ch) (struct-copy node (hash-ref graph (edge-dst (first ch))) [marked #t]));marca o nó como visitado e atualiza a hash table
-        (display (node-id (first ch)));adicionar operação relevante aqui
+        (display (edge-dst (first ch)));adicionar operação relevante aqui
         (display " ")
         (display (edge-program (first ch)))
         (newline)
