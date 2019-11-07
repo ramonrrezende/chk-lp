@@ -3,7 +3,7 @@
 (require "graph.rkt")
 (require "node.rkt")
 
-(provide split-pv next build-tree parse-program is-simbol lex)
+(provide pre-order split-pv next build-tree parse-program is-simbol lex)
 
 (define (parse-program program tokens cursor)
     (if (< cursor (string-length program))
@@ -31,7 +31,7 @@
             )
             (build-tree program tree (+ cursor 1))
         )
-        (append tree (string-split program ";"))
+        (append tree (list (string-split program ";")));talvez pra caralho
     )
 )
 
@@ -40,6 +40,21 @@
     (when (> (length local) 0)
         (append local)
     )
+)
+
+(define (pre-order tree)
+    (when (> (length tree) 0)
+        (if (list? (first tree))
+            (pre-order (first tree))
+            (show-node tree)
+        )
+        (pre-order (rest tree))
+    )
+)
+
+(define (show-node tree)
+    (display (first tree))
+    (newline)
 )
 
 (define (next program cursor deep)
@@ -70,7 +85,7 @@
 (define (lex s)
     (cond
         [(equal? s #\;) "END"]
-        [(equal? s #\U) "UNION"]
+        [(equal? s #\U) "UNION"];letra U
         [(equal? s #\*) "AST"]
         [(equal? s #\() "OPEN"]
         [(equal? s #\)) "CLOSE"]
