@@ -7,7 +7,10 @@
 ;Cria um grafo a partir de uma hash table vazia e uma lista de nós
 (define (create-graph g nodes)
     (hash-set! g (node-id (first nodes)) (first nodes) );associa o nó a uma chave da hash table(a chave é o id do nó)
-    (if (> (length (rest nodes)) 0) (create-graph g (rest nodes)) (display "Done!\n"));chama a função recursivamente para adicionar todos os nós da lista
+    (if (> (length (rest nodes)) 0) 
+        (create-graph g (rest nodes)) 
+        (display "Done!\n")
+    );chama a função recursivamente para adicionar todos os nós da lista
 )
 
 (define (explore graph ch)
@@ -17,8 +20,12 @@
         (display " ")
         (display (edge-program (first ch)))
         (newline)
-        (when (> (length (node-childrens (hash-ref graph (edge-dst (first ch))))) 0) (explore graph (node-childrens (hash-ref graph (edge-dst (first ch))))))
-        (when (> (length (rest ch)) 0) (explore graph (rest ch)))
+        (when (> (length (node-childrens (hash-ref graph (edge-dst (first ch))))) 0) 
+            (explore graph (node-childrens (hash-ref graph (edge-dst (first ch)))))
+        )
+        (when (> (length (rest ch)) 0)
+            (explore graph (rest ch))
+        )
     )
 )
 
