@@ -5,43 +5,6 @@
 
 (provide pre-order split-pv next build-tree parse-program is-simbol lex)
 
-(define (parse-program program tokens cursor)
-    (if (< cursor (string-length program))
-        (parse-program program (append tokens (list (lex (string-ref program cursor)))) (+ cursor 1))
-        (append tokens)
-    )
-)
-
-(define (build-tree program tree cursor)
-    (if(< cursor (string-length program))
-        (if (equal? (lex (string-ref program cursor)) "OPEN")
-            (build-tree
-                (substring program (+ (next program (+ cursor 1) 1) 1) (string-length program))
-                (append 
-                    tree
-                    (if (equal? null (string-split (substring program 0 cursor) ";"))
-                        (list (build-tree (substring program (+ cursor 1) (next program (+ cursor 1) 1)) null 0))
-                        (list 
-                            (string-split (substring program 0 cursor) ";")
-                            (build-tree (substring program (+ cursor 1) (next program (+ cursor 1) 1)) null 0)
-                        )
-                    )
-                )
-                0
-            )
-            (build-tree program tree (+ cursor 1))
-        )
-        (append tree (list (string-split program ";")));talvez pra caralho
-    )
-)
-
-(define (split-pv str)
-    (define local (string-split str ";"))
-    (when (> (length local) 0)
-        (append local)
-    )
-)
-
 (define (pre-order tree)
     (when (> (length tree) 0)
         (if (list? (first tree))
