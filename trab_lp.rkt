@@ -1,6 +1,9 @@
 #lang racket
 
-(struct node (id tag childs) #:transparent)
+(struct node (id tag childs))
+
+; Lista de triplas
+; Primeira solução já é válida
 
 (define n1 (node 0 #f '((1 "a"))))
 (define n2 (node 1 #f '((2 "b"))))
@@ -8,6 +11,7 @@
 (define n4 (node 3 #f '()))
 (define n5 (node 4 #f '()))
 
+; [n1: (0 [1 "a"]), n2: (0 [1 "a"]), n3: (0 [1 "a"]), n4: (0 [1 "a"]), n5: (0 [1 "a"])]
 (define root (list n1 n2 n3 n4 n5))
 
 ; return True if node already visited
@@ -20,6 +24,12 @@
     (node-childs (list-ref root pos))
 )
 
+; (define (getDst root pos)
+;     (when (not (null? root)) 
+;         (list-ref (getChilds root pos) 0)
+;     )
+; )
+
 ; return rest of the commands
 (define (shiftCommand program)
     (take-right program (- (length program) 1))
@@ -29,23 +39,21 @@
 ;     ()
 ; )
 
-; (define (getDstNode childs)
-;     (filter (lambda (arg)
-;         (= arg-a arg-b)    
-;     ) childs)
-; )
 
 ; main
 (define (goThrough root pos program)
     (define isMarked (getTag root pos))
     (define childs (getChilds root pos))
     (define command (list-ref program 0))
+    (printf "\nI am in ~a\n" pos)
     (display program)
-    (display childs)
     (display "\n")
-    (display command)
-    (display "\n")
+    (define lenChilds (length childs))
 
+
+    ; Na hora de percorrer o feixo transitivo, retornar o id's dos nós finais da execução do mesmo
+    ; 
+    ; 
     ; (take-right '(1 2 3 4) (- (length '(1 2 3 4)) 1))
     ; (split-at '(1 2 3) (floor (/ (length '(1 2 3)) 2)))
     (define filteredChilds (filter 
@@ -53,17 +61,27 @@
             (if (not (null? childs)) (string=? (list-ref arg 1) command) null)
         ) 
     childs))
-
-    (display filteredChilds)
-    (printf "\nI am in ~a\n" pos) ; Fazer a magia
     
-    (if (and (not isMarked) (= (length filteredChilds) 1))
-        (goThrough root (list-ref (argmin car filteredChilds) 0) (shiftCommand program))
-        (if () 
-            ()
-            ()
+    (printf "\nFilterChilds ~a\n" filteredChilds)
+    
+    (cond
+        [(and (not isMarked) (= lenChilds 1)) 
+            (for-each (lambda (arg)
+            ; (printf "ARG ~a\n" (list-ref arg 0)))       
+            (printf "\nlenChilds ~a\n" lenChilds) (goThrough root (list-ref arg 0) (shiftCommand program)
+            )
         )
+        childs)]
+        [(and (not isMarked) (> lenChilds 1)) 
+            (for-each (lambda (arg)
+            ; (printf "ARG ~a\n" (list-ref arg 0)))       
+            (printf "\nlenChilds ~a\n" lenChilds) (goThrough root (list-ref arg 0) (shiftCommand program)
+            )
+        )
+        childs)]
     )
+        ; ((printf "\nlenChilds ~a\n" lenChilds) (goThrough root (list-ref (argmin car filteredChilds) 0) (shiftCommand program)))
+)
 
     ; (list-copy node (hash-ref graph bgn) [marked #t])
 
@@ -71,9 +89,9 @@
     ;  (goThrough root (list-ref (argmin car filteredChilds) 0) (shiftCommand program))
     ;  null
     ; )
-)
 
-(goThrough root 0 '("a" "b" "a|b"))
+
+(goThrough root 0 '("a" "b" "a" "b"))
 
 ; (for-each (lambda (arg)
 ;     (printf "got ~a\n" (node-childs arg))) 
