@@ -2,10 +2,29 @@
 
 (require "graph.rkt")
 (require "node.rkt")
+(require "trab_lp.rkt")
 
 (provide clean get-type is-atomic split-op pre-order next parse-program is-simbol lex)
 
+(define (execute program tree context)
+    (define pr (clean program))
+    (define type (get-type pr 0))
+    (define subprogs (split-op pr null type 0))
+    (cond
+        [(equal? type "END") ]
+        [(equal? type "UNION") ]
+        [(equal? type "AST") ]
+        [(equal? type "ATOMIC") ]
+    )
+)
 
+(define (execute-end subprogs tree context)
+    (execute )
+)
+
+(define (execute-atomic program tree context)
+    (step tree context program)
+)
 
 (define (clean program)
     (if (and (equal? (lex (string-ref program 0)) "OPEN") (equal? (lex (string-ref program (- (string-length program) 1))) "CLOSE"))
