@@ -5,6 +5,8 @@
 
 (provide clean get-type is-atomic split-op pre-order next parse-program is-simbol lex)
 
+
+
 (define (clean program)
     (if (and (equal? (lex (string-ref program 0)) "OPEN") (equal? (lex (string-ref program (- (string-length program) 1))) "CLOSE"))
         (if (= (next program 1 1) (- (string-length program) 1))
@@ -42,6 +44,13 @@
             (string-append "ERRO")
         )
         (string-append "ATOMIC")
+    )
+)
+
+(define (is-atomic program)
+    (if (and (= (string-length program) 1) (not (is-simbol program)))
+        #t
+        #f
     )
 )
 
