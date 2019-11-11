@@ -1,5 +1,8 @@
 #lang racket
 
+(provide node)
+(provide goThrough getDstId)
+
 (struct node (id tag childs))
 
 ; Lista de triplas
@@ -24,21 +27,22 @@
     (node-childs (list-ref root pos))
 )
 
-; (define (getDst root pos)
-;     (when (not (null? root)) 
-;         (list-ref (getChilds root pos) 0)
-;     )
-; )
+; VOCE VAI USAR ESSA AQUI
+(define (getDstId root pos command)
+    (define childs (getChilds root pos))
+    ; (display command)
+    (define filteredChilds (map 
+        (lambda (arg)
+            (when (string=? (list-ref arg 1) command) (list-ref arg 0))
+        )
+    childs))
+    filteredChilds
+)
 
 ; return rest of the commands
 (define (shiftCommand program)
     (take-right program (- (length program) 1))
 )
-
-; (define (parseAtomic command)
-;     ()
-; )
-
 
 ; main
 (define (goThrough root pos program)
@@ -49,7 +53,6 @@
     (display program)
     (display "\n")
     (define lenChilds (length childs))
-
 
     ; Na hora de percorrer o feixo transitivo, retornar o id's dos nós finais da execução do mesmo
     ; 
@@ -62,17 +65,10 @@
         ) 
     childs))
     
-    (printf "\nFilterChilds ~a\n" filteredChilds)
+    (printf "\nIDS ~a\n" (getDstId root pos command))
     
     (cond
-        [(and (not isMarked) (= lenChilds 1)) 
-            (for-each (lambda (arg)
-            ; (printf "ARG ~a\n" (list-ref arg 0)))       
-            (printf "\nlenChilds ~a\n" lenChilds) (goThrough root (list-ref arg 0) (shiftCommand program)
-            )
-        )
-        childs)]
-        [(and (not isMarked) (> lenChilds 1)) 
+        [(and (not isMarked) (>= lenChilds 1)) 
             (for-each (lambda (arg)
             ; (printf "ARG ~a\n" (list-ref arg 0)))       
             (printf "\nlenChilds ~a\n" lenChilds) (goThrough root (list-ref arg 0) (shiftCommand program)
@@ -91,7 +87,7 @@
     ; )
 
 
-(goThrough root 0 '("a" "b" "a" "b"))
+; (goThrough root 0 '("a" "b" "a" "b"))
 
 ; (for-each (lambda (arg)
 ;     (printf "got ~a\n" (node-childs arg))) 
