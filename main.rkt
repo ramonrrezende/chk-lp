@@ -15,7 +15,7 @@
 
 (define tree (list n0 n1 n2))
 
-(define formula "a;b")
+(define formula "aUb")
 
 (execute formula tree 0)
 ;(step tree 0 formula)

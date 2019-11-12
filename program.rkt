@@ -10,11 +10,14 @@
     ;(newline)
     (define pr (clean program))
     (define type (get-type pr 0))
-    ;(display type)
+    (display type)
+    (newline)
     (define subprogs (split-op pr null (xel type) 0))
+    (display subprogs)
+    (newline)
     (cond
         [(equal? type "END") (execute-end subprogs tree context)]
-;        [(equal? type "UNION") ]
+        [(equal? type "UNION") (execute-union subprogs tree context null)]
 ;        [(equal? type "AST") ]
         [(equal? type "ATOMIC") (execute-atomic program tree context)]
     )
@@ -31,13 +34,11 @@
     )
 )
 
-(define (execute-union subprogs tree context)
-    (define lcontext null)
+(define (execute-union subprogs tree context lcontext)
     (if(> (length subprogs) 0)
-        (append lcontext (execute (first subprogs) tree context))
-        (append (execute-union (rest subprogs) tree context))
+        (execute-union (rest subprogs) tree context (execute (first subprogs) tree context))
+        lcontext
     )
-    lcontext
 )
 
 (define (execute-atomic program tree context)
