@@ -1,29 +1,51 @@
 #lang racket
 
-(require "graph.rkt")
-(require "node.rkt")
-(require "trab_lp.rkt")
+(require "tree.rkt")
 
-(provide clean get-type is-atomic split-op pre-order next parse-program is-simbol lex)
+(provide xel execute execute-atomic execute-end clean get-type is-atomic split-op pre-order next is-simbol lex)
+(provide step get-dst node node-id node-childrens edge edge-dst edge-program)
 
 (define (execute program tree context)
+    ;(display program)
+    ;(newline)
     (define pr (clean program))
     (define type (get-type pr 0))
-    (define subprogs (split-op pr null type 0))
+    ;(display type)
+    (define subprogs (split-op pr null (xel type) 0))
     (cond
-        [(equal? type "END") ]
-        [(equal? type "UNION") ]
-        [(equal? type "AST") ]
-        [(equal? type "ATOMIC") ]
+        [(equal? type "END") (execute-end subprogs tree context)]
+;        [(equal? type "UNION") ]
+;        [(equal? type "AST") ]
+        [(equal? type "ATOMIC") (execute-atomic program tree context)]
     )
 )
 
 (define (execute-end subprogs tree context)
-    (execute )
+    (define new-context (execute (clean (first subprogs)) tree context))
+    (if (not (void? new-context))
+        (if (> (length (rest subprogs)) 0)
+            (execute-end (rest subprogs) tree new-context)
+            new-context
+        )
+        -1
+    )
+)
+
+(define (execute-union subprogs tree context)
+    (define lcontext null)
+    (if(> (length subprogs) 0)
+        (append lcontext (execute (first subprogs) tree context))
+        (append (execute-union (rest subprogs) tree context))
+    )
+    lcontext
 )
 
 (define (execute-atomic program tree context)
-    (step tree context program)
+    (define result (step tree context program))
+    (if (= result -1)
+        (display "INVALID\n")
+        result
+    )
 )
 
 (define (clean program)
@@ -123,6 +145,20 @@
         [(equal? s #\[) "OPEN"]
         [(equal? s #\]) "CLOSE"]
         [(equal? s #\?) "QST"]
+        [else s]
+    )
+)
+
+(define (xel s)
+    (cond
+        [(equal? s "END") ";"]
+        [(equal? s "UNION") "U"];letra U
+        [(equal? s "AST") "*"]
+        [(equal? s "OPEN") "("]
+        [(equal? s "CLOSE") ")"]
+        [(equal? s "OPEN") "["]
+        [(equal? s "CLOSE") "]"]
+        [(equal? s "QST") "?"]
         [else s]
     )
 )

@@ -1,36 +1,21 @@
 #lang racket
-(require "node.rkt" "graph.rkt" "node.rkt" )
+(require "program.rkt")
 
-(define e11 (edge 4 "a"))
+(define e01 (edge 1 "a"))
 
-(define e12 (edge 2 "a"))
+(define e02 (edge 2 "b"))
 
-(define e13 (edge 3 "b"))
+(define e12 (edge 2 "b"))
 
-(define e21 (edge 3 "c"))
+(define n0 (node 0 (list e01 e02)))
 
-(define e31 (edge 1 "b"))
+(define n1 (node 1 (list e12)))
 
-(define e41 (edge 4 "d"))
+(define n2 (node 2 (list)))
 
-(define n1 (node 1 #f (list e11 e12 e13)))
+(define tree (list n0 n1 n2))
 
-(define n2 (node 2 #f (list e21)))
+(define formula "a;b")
 
-(define n3 (node 3 #f (list e31)))
-
-(define n4 (node 4 #f (list e41)))
-
-(define g (make-hash))
-
-(define nodes (list n1 n2 n3 n4))
-
-(define formula "a ; b ; ( a U b)")
-
-(create-graph g nodes)
-
-(newline)
-(run g 2)
-
-(display formula)
-(newline)
+(execute formula tree 0)
+;(step tree 0 formula)
